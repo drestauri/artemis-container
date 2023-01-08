@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+   <core xmlns="urn:activemq:core">
+
+      <bindings-directory>./data/bindings</bindings-directory>
+
+      <journal-directory>./data/journal</journal-directory>
+
+      <large-messages-directory>./data/largemessages</large-messages-directory>
+
+      <paging-directory>./data/paging</paging-directory>
+
+      <cluster-user>egscluster</cluster-user>
+
+      <cluster-password>egs$ecret</cluster-password>
+
+
+      <ha-policy>
+         <replication>
+            <master>
+               <!-- Needed so backup nodes know which live node to connect to -->
+               <group-name>node-A</group-name>
+
+               <!--we need this for auto failback-->
+               <check-for-live-server>true</check-for-live-server>
+            </master>
+         </replication>
+      </ha-policy>
+
+
+
+      <!-- Connectors -->
+
+      <connectors>
+         <connector name="self-A-connector">tcp://0.0.0.0:61616</connector>
+         <connector name="backup-A-connector">tcp://0.0.0.0:61617</connector>
+         <connector name="backup2-A-connector">tcp://0.0.0.0:61622</connector>
+         <connector name="node-B-connector">tcp://0.0.0.0:61618</connector>
+      </connectors>
+
+      <!-- Acceptors -->
+      <acceptors>
+         <acceptor name="cluster-A-acceptor">tcp://0.0.0.0:61616</acceptor>
+
+         <!-- Acceptor for connection routing. Use 61620 for dedicated port-->
+<!--         <acceptor name="router-A-acceptor">tcp://0.0.0.0:61616?router=symmetric-router;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE;</acceptor> -->
+      </acceptors>
+
+      <cluster-connections>
+         <cluster-connection name="my-cluster">
+            <connector-ref>self-A-connector</connector-ref>
+            <retry-interval>500</retry-interval>
+            <use-duplicate-detection>true</use-duplicate-detection>
+            <message-load-balancing>ON_DEMAND</message-load-balancing>
+            <max-hops>1</max-hops>
+            <static-connectors>
+               <connector-ref>backup-A-connector</connector-ref>
+               <connector-ref>node-B-connector</connector-ref>
+               <connector-ref>backup2-A-connector</connector-ref>
+            </static-connectors>
+         </cluster-connection>
+      </cluster-connections>
+
+
+<!--
+      <connection-routers>
+         <connection-router name="symmetric-router">
+            <key-type>CLIENT_ID</key-type>
+            <key-filter>^.{3}</key-filter>
+            <policy name="CONSISTENT_HASH"/>
+            <pool>
+               <quorum-size>1</quorum-size>
+               <local-target-enabled>true</local-target-enabled>
+               <cluster-connection>my-cluster</cluster-connection>
+            </pool>
+         </connection-router>
+      </connection-routers>
+-->
+
+      <!-- Other config -->
+
+      <security-settings>
+         <security-setting match="#">
+            <permission roles="guests" type="createDurableQueue"/>
+            <permission roles="guests" type="deleteDurableQueue"/>
+            <permission roles="guests" type="createNonDurableQueue"/>
+            <permission roles="guests" type="deleteNonDurableQueue"/>
+            <permission roles="guests" type="createAddress"/>
+            <permission roles="guests" type="deleteAddress"/>
+            <permission roles="guests" type="consume"/>
+            <permission roles="guests" type="send"/>
+
+            <permission roles="guests" type="manage"/>
+         </security-setting>
+      </security-settings>
+
+
+      <address-settings>
+         <address-setting match="#">
+            <dead-letter-address>DLQ</dead-letter-address>
+            <expiry-address>ExpiryQueue</expiry-address>
+            <redelivery-delay>0</redelivery-delay>
+            <max-size-bytes>-1</max-size-bytes>
+            <message-counter-history-day-limit>10</message-counter-history-day-limit>
+            <address-full-policy>PAGE</address-full-policy>
+            <auto-create-queues>true</auto-create-queues>
+            <auto-create-addresses>true</auto-create-addresses>
+         </address-setting>      
+      </address-settings>
+
+
+     <addresses>
+         <address name="DLQ">
+            <anycast>
+               <queue name="DLQ" />
+            </anycast>
+         </address>
+         <address name="ExpiryQueue">
+            <anycast>
+               <queue name="ExpiryQueue" />
+            </anycast>
+         </address>
+      </addresses>
+
+
+
+
+   </core>
+</configuration>
