@@ -67,8 +67,10 @@ COPY bootstrap.xml ./mybroker/etc/
 EXPOSE 61616
 EXPOSE 8161
 
-#CMD ["/home/artemis/./start-service.sh"]
 CMD /home/artemis/mybroker/bin/artemis-service start > log.txt && tail -f log.txt
+
+# If you only do the following, it will execute the script and then kill the pod since there are no active processes:
+#CMD /home/artemis/mybroker/bin/artemis-service start
 
 #USER root
 

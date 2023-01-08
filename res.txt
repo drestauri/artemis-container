@@ -87,6 +87,7 @@ STEP 30/31: EXPOSE 8161
 --> Using cache d4755a711c571ab1f2b34a384f2651dbc13fc0dc6c20d220ae259cb3d925a38c
 --> d4755a711c5
 STEP 31/31: CMD /home/artemis/mybroker/bin/artemis-service start > log.txt && tail -f log.txt
+--> Using cache b1cfdedfaa33c0aac75aa2c247d06428608786c1b2af5d9b586f21866dcaca56
 COMMIT rhel7-artemis
 --> b1cfdedfaa3
 Successfully tagged localhost/rhel7-artemis:latest
