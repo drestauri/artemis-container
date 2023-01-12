@@ -2,6 +2,9 @@
 Creating an Artemis container
 
 # TODO
+ - Install nslookup
+ - Need to get DNS to work in order to find other containers by name
+   > dnsmasq? bind? both look like a pain to configure :(
  - Update the usage section below
  - Test thoroughly
  - Start implementing backups and other nodes

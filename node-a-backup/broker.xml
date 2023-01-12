@@ -35,13 +35,12 @@ under the License.
 
       <ha-policy>
          <replication>
-            <master>
+            <slave>
                <!-- Needed so backup nodes know which live node to connect to -->
                <group-name>node-A</group-name>
 
-               <!--we need this for auto failback-->
-               <!-- <check-for-live-server>true</check-for-live-server> -->
-            </master>
+               <allow-failback>false</allow-failback>
+            </slave>
          </replication>
       </ha-policy>
 
@@ -50,15 +49,13 @@ under the License.
       <!-- Connectors -->
 
       <connectors>
-         <connector name="self-A-connector">tcp://0.0.0.0:61616</connector>
-         <connector name="backup-A-connector">tcp://0.0.0.0:61617</connector>
-         <!-- <connector name="backup2-A-connector">tcp://0.0.0.0:61622</connector> -->
-         <!-- <connector name="node-B-connector">tcp://0.0.0.0:61618</connector> -->
+         <connector name="self-A-connector">tcp://0.0.0.0:61617</connector>
+         <connector name="live-A-connector">tcp://0.0.0.0:61616</connector>
       </connectors>
 
       <!-- Acceptors -->
       <acceptors>
-         <acceptor name="self-A-acceptor">tcp://0.0.0.0:61616</acceptor>
+         <acceptor name="self-A-acceptor">tcp://0.0.0.0:61617</acceptor>
 
       </acceptors>
 
@@ -70,9 +67,7 @@ under the License.
             <message-load-balancing>ON_DEMAND</message-load-balancing>
             <max-hops>1</max-hops>
             <static-connectors>
-               <connector-ref>backup-A-connector</connector-ref>
-               <!-- <connector-ref>node-B-connector</connector-ref> -->
-               <!-- <connector-ref>backup2-A-connector</connector-ref> -->
+               <connector-ref>live-A-connector</connector-ref>
             </static-connectors>
          </cluster-connection>
       </cluster-connections>

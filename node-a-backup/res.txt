@@ -69,19 +69,26 @@ STEP 24/31: COPY artemis-users.properties ./mybroker/etc/
 --> Using cache fa25df641fafb94a6741e14ed5bc58a5c4a917a1a1a50ed4947f756c78cae748
 --> fa25df641fa
 STEP 25/31: COPY broker.xml ./mybroker/etc/
---> b65900f066f
+--> Using cache 0925241d14b49f24b9ce6456855366425fee3fcd0dd5747bd117b8dde581dd9e
+--> 0925241d14b
 STEP 26/31: COPY login.config ./mybroker/etc/
---> 5eec5b1723f
+--> Using cache a97238ae8657357e4d96360d0925082b5e04310cc7ff912ce20aee336f23d49b
+--> a97238ae865
 STEP 27/31: COPY artemis-roles.properties ./mybroker/etc/
---> e9f709b143f
+--> Using cache 75c7e9ea3d3626da1cc6c86181753c6f04ffe172e5cbf39b2a9ae07a50ed3eea
+--> 75c7e9ea3d3
 STEP 28/31: COPY bootstrap.xml ./mybroker/etc/
---> 17747634dbd
-STEP 29/31: EXPOSE 61616
---> dcb0d9b7e29
-STEP 30/31: EXPOSE 8161
---> 26459422895
+--> Using cache 29d0ad8b83b9a95f11c9de632109f787d954942630d370d103f7310d94c1e480
+--> 29d0ad8b83b
+STEP 29/31: EXPOSE 61617
+--> Using cache 3960d8e01d32c6e69d2ada1aa3397fd8e72dd8e8931f1473a4a9148daee8ef17
+--> 3960d8e01d3
+STEP 30/31: EXPOSE 8162
+--> Using cache 15531e4616fae586edc667b2f15074730bc788ff6797cba0dc6e6860ac49e0bd
+--> 15531e4616f
 STEP 31/31: CMD /home/artemis/mybroker/bin/artemis-service start > live-log.txt && tail -f live-log.txt
-COMMIT rhel7-artemis
---> d9072070e96
-Successfully tagged localhost/rhel7-artemis:latest
-d9072070e960c8e666d952517198e8d057f266cbeb8bd50accb466b5e8f128bb
+--> Using cache 8ff1c256caf73cb83767c5bdfc6c0b58a08078e17fb1e894822ebd9ba0e9e790
+COMMIT rhel7-artemis-backup
+--> 8ff1c256caf
+Successfully tagged localhost/rhel7-artemis-backup:latest
+8ff1c256caf73cb83767c5bdfc6c0b58a08078e17fb1e894822ebd9ba0e9e790
