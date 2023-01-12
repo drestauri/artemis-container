@@ -39,7 +39,7 @@ USER artemis
 #====== ARTEMIS USER =====
 # Copy over Artemis and unpack it
 WORKDIR /home/artemis/
-COPY artemis-2.27.1-bin.tar.gz /home/artemis/
+COPY artemis-2.27.1-bin.tar.gz .
 RUN tar -xvf artemis-2.27.1-bin.tar.gz
 
 # Setup permanent environment variable
@@ -47,7 +47,7 @@ RUN echo "export ARTEMIS_HOME=/home/artemis/apache-artemis-2.27.1" >> /home/arte
 RUN source /home/artemis/.bashrc
 
 # Build broker:./artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
-RUN /home/artemis/apache-artemis-2.27.1/bin/artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
+RUN apache-artemis-2.27.1/bin/artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
 
 # Create a file for testing from within the container
 RUN echo "/home/artemis/mybroker/bin/artemis run" > runit.sh
@@ -67,7 +67,7 @@ COPY bootstrap.xml ./mybroker/etc/
 EXPOSE 61616
 EXPOSE 8161
 
-CMD /home/artemis/mybroker/bin/artemis-service start > log.txt && tail -f log.txt
+CMD /home/artemis/mybroker/bin/artemis-service start > live-log.txt && tail -f live-log.txt
 
 # If you only do the following, it will execute the script and then kill the pod since there are no active processes:
 #CMD /home/artemis/mybroker/bin/artemis-service start
