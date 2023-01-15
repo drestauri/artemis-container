@@ -50,8 +50,8 @@ under the License.
       <!-- Connectors -->
 
       <connectors>
-         <connector name="self-A-connector">tcp://0.0.0.0:61616</connector>
-         <connector name="backup-A-connector">tcp://0.0.0.0:61617</connector>
+         <connector name="self-A-connector">tcp://live-server:61616</connector>
+         <connector name="backup-A-connector">tcp://backup-server:61617</connector>
          <!-- <connector name="backup2-A-connector">tcp://0.0.0.0:61622</connector> -->
          <!-- <connector name="node-B-connector">tcp://0.0.0.0:61618</connector> -->
       </connectors>

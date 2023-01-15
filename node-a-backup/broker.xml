@@ -49,8 +49,8 @@ under the License.
       <!-- Connectors -->
 
       <connectors>
-         <connector name="self-A-connector">tcp://0.0.0.0:61617</connector>
-         <connector name="live-A-connector">tcp://0.0.0.0:61616</connector>
+         <connector name="self-A-connector">tcp://backup-server:61617</connector>
+         <connector name="live-A-connector">tcp://live-server:61616</connector>
       </connectors>
 
       <!-- Acceptors -->

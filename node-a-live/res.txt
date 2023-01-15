@@ -1,95 +1,117 @@
-STEP 1/31: FROM rhel7
-STEP 2/31: MAINTAINER Red Hat, Inc.
+STEP 1/39: FROM rhel7
+STEP 2/39: MAINTAINER Red Hat, Inc.
 --> Using cache 9c7fd3b0ececa5691f96b8e1c6c8213f58da2d5c43b1837043b5e1e28aee1d2c
 --> 9c7fd3b0ece
-STEP 3/31: LABEL summary="Provides the latest release of Red Hat Enterprise Linux 7 in a fully featured and supported base image."
---> Using cache ad3b36e5fed47350b38efd8bdde681e5fe10d8f16348d896408465ec68bc7705
---> ad3b36e5fed
-STEP 4/31: LABEL io.k8s.display-name="Red Hat Enterprise Linux 7"
---> Using cache d56d2d1fbed4c52a1a9ec342202e0b1dda9b8dc4301088bda153f5085963b9f5
---> d56d2d1fbed
-STEP 5/31: LABEL io.openshift.tags="base rhel7"
---> Using cache fd6113436bd68eeaa6cce846e6d5286e871bf90146c080f603344b4f2cd0af1a
---> fd6113436bd
-STEP 6/31: ENV container oci
---> Using cache 77709aa4c1d29362175561a52f1b9101e386315f4a990997dd7ee0f58a3045b9
---> 77709aa4c1d
-STEP 7/31: ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
---> Using cache 99db0ea264babb9132385219becc773df7b7a0aa7b88010f9aeb69a615b23d47
---> 99db0ea264b
-STEP 8/31: RUN yum install sudo -y
---> Using cache ea9c8801863d2be132ff3a3269dfe04d336892dc8178f437fa3ae7e205ba8436
---> ea9c8801863
-STEP 9/31: RUN yum install java-11-openjdk -y
---> Using cache 005d3e483986c1296edca652539e44ce642600003e144e4d3a6d5c885bf5a17d
---> 005d3e48398
-STEP 10/31: RUN useradd artemis
---> Using cache b0b52b9c3f4cf64cd6d51aaf9c9c774bb6fb91692b769570040974546d720ade
---> b0b52b9c3f4
-STEP 11/31: RUN usermod -aG wheel artemis
---> Using cache 25e8fa5cdffcf814a292d3914aab95520cd545344371da3f4320d70297fc673d
---> 25e8fa5cdff
-STEP 12/31: RUN echo artemis:password | chpasswd
---> Using cache b48f67c54513de98559a4888d68fed672018edcb8c3daf20c619d565260f2860
---> b48f67c5451
-STEP 13/31: USER artemis
---> Using cache 1536f83309c40f2eeeedf8e6b26e1d57cdf273ed09b1ef466ecbe57598d6f3fe
---> 1536f83309c
-STEP 14/31: WORKDIR /home/artemis/
---> Using cache 0922fe0cf73fe74823a10eee760608d0b22aece20a65552240e0c52428664adc
---> 0922fe0cf73
-STEP 15/31: COPY artemis-2.27.1-bin.tar.gz .
---> Using cache 3353cca1e229f4dded3b155f4b8c58d2cb8b5074d33a2b97749b1aaccc286ca0
---> 3353cca1e22
-STEP 16/31: RUN tar -xvf artemis-2.27.1-bin.tar.gz
---> Using cache e89ddfcdc9d033e9b735edf2b35750a04830ff733a79f4f28517feff16e54e61
---> e89ddfcdc9d
-STEP 17/31: RUN echo "export ARTEMIS_HOME=/home/artemis/apache-artemis-2.27.1" >> /home/artemis/.bashrc
---> Using cache 704e55cf870f6cc1a64022cd292adfe956730fd69017078e3eb2ae5041bbe140
---> 704e55cf870
-STEP 18/31: RUN source /home/artemis/.bashrc
---> Using cache f61b135972573948c61cf266c5439a27341557e6e9ed1d4f15bf791eef26be34
---> f61b1359725
-STEP 19/31: RUN apache-artemis-2.27.1/bin/artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
---> Using cache cc27f9df2e725baf7d6061e8ddd9a713e51efbac11106767637b0bc79cd19f9e
---> cc27f9df2e7
-STEP 20/31: RUN echo "/home/artemis/mybroker/bin/artemis run" > runit.sh
---> Using cache 90755e8ea2d124c459dc02bc8e56495d108cc486b5dcdc0497a51f16a6208b7b
---> 90755e8ea2d
-STEP 21/31: RUN chmod +x runit.sh
---> Using cache b9929367ca25a233fad9aefb3feb5c32fb846fe2607f8b881348a2e38a2a274a
---> b9929367ca2
-STEP 22/31: RUN echo "/home/artemis/mybroker/bin/artemis-service start" > start_service.sh
---> Using cache 096a24345bc192752cef04a156edad5e0dcf2862b65f7cb817da1515297f2ebe
---> 096a24345bc
-STEP 23/31: RUN chmod +x start_service.sh
---> Using cache 3cf4caf4979dfcbbcc0ca9558d436cea4505a3309669591179a65c95905ad531
---> 3cf4caf4979
-STEP 24/31: COPY artemis-users.properties ./mybroker/etc/
---> Using cache fa25df641fafb94a6741e14ed5bc58a5c4a917a1a1a50ed4947f756c78cae748
---> fa25df641fa
-STEP 25/31: COPY broker.xml ./mybroker/etc/
---> Using cache b65900f066fb074f6d567b577e0a1449ea020f0abd7042ee3075d81f7f193152
---> b65900f066f
-STEP 26/31: COPY login.config ./mybroker/etc/
---> Using cache 5eec5b1723fedebbfaac5c517961cb14f9943d893d49ecb7e68df38f50f2e8a8
---> 5eec5b1723f
-STEP 27/31: COPY artemis-roles.properties ./mybroker/etc/
---> Using cache e9f709b143f81a318d94b9596281f9869e1120b0e93a8621fe4fd1c1f5da8c1c
---> e9f709b143f
-STEP 28/31: COPY bootstrap.xml ./mybroker/etc/
---> Using cache 17747634dbd26fe6a6618aa3a8f3c331be4cc976751438d44ace14797da91007
---> 17747634dbd
-STEP 29/31: EXPOSE 61616
---> Using cache dcb0d9b7e29576bb47641c63061e929d872e7ee441a91169206325b8b43afc3d
---> dcb0d9b7e29
-STEP 30/31: EXPOSE 8161
---> Using cache 26459422895df7ae7c8745743c09dd911689fc61e33c3a539c2294023dbef2ed
---> 26459422895
-STEP 31/31: CMD /home/artemis/mybroker/bin/artemis-service start > live-log.txt && tail -f live-log.txt
---> Using cache d9072070e960c8e666d952517198e8d057f266cbeb8bd50accb466b5e8f128bb
+STEP 3/39: ARG username=artemis
+--> Using cache d92f14c6c995e08a148309211df049dd6f3b6be003fb34df932aaffb6117c6db
+--> d92f14c6c99
+STEP 4/39: ARG default_pw=artemis
+--> Using cache 29669f2f6fbd4b9ff1440f6bf92ac7c401febcee3a197cf8c8d67faeaa0cc786
+--> 29669f2f6fb
+STEP 5/39: ARG artemis_tarball=artemis-2.27.1-bin.tar.gz
+--> Using cache a707b7a1d2262397c56b57c1ff17f4e06078b7968cf52e27c3452f6c05cc58c0
+--> a707b7a1d22
+STEP 6/39: ARG artemis_install_dir=apache-artemis-2.27.1
+--> Using cache 50c92bcb0f01c076abe57e18349bf3cf58ff14662f932140e4b04ef892b46d4a
+--> 50c92bcb0f0
+STEP 7/39: ARG broker_user=artemis
+--> Using cache aca3c30adacced2a570bf9b08a665e35846980e7953dec0cf2cb098c50f4903a
+--> aca3c30adac
+STEP 8/39: ARG broker_pw=artemis
+--> Using cache 95822bc49f0db2a2341cd024a0a545db1b292248cf5e9bb99ba12a35af91d2e9
+--> 95822bc49f0
+STEP 9/39: ARG broker_port=61616
+--> Using cache 6eeafbeb1f2dda127c1818df34bac554259259186a5c4cd46da1c4b28768863e
+--> 6eeafbeb1f2
+STEP 10/39: ARG broker_web=8161
+--> Using cache 1d91fa14a622a35573d40d1fa5e9b3d7db709b69c03207184a4d649663ce30da
+--> 1d91fa14a62
+STEP 11/39: ENV env_username $username
+--> Using cache 66dada00d370c0d48d81a5ba27118f8f0a4ee0a55746dcbaf9065fffceb0c94d
+--> 66dada00d37
+STEP 12/39: ENV env_artemis_install_dir $artemis_install_dir
+--> Using cache 7771e880c32d4df8ddfad06a97304650f8626e4d31f36e93c284e6451c31c59f
+--> 7771e880c32
+STEP 13/39: LABEL summary="Provides the latest release of Red Hat Enterprise Linux 7 in a fully featured and supported base image."
+--> Using cache 2f00b476b0c653bd6741313824842ae8d4018a21c015eea2911622d842a75253
+--> 2f00b476b0c
+STEP 14/39: LABEL io.k8s.display-name="Red Hat Enterprise Linux 7"
+--> Using cache bedec920ab7deffc3d49fb380dba7ea8b6070a742ccc712829cfe90d6dbeaa5e
+--> bedec920ab7
+STEP 15/39: LABEL io.openshift.tags="base rhel7"
+--> Using cache e5aabd46c51314e4b989ff8f1343e7a73da592b4ba625aba6daf2c19b66b4e28
+--> e5aabd46c51
+STEP 16/39: ENV container oci
+--> Using cache 683bc9403b4f6952f4cc6053eb7cc247dca8bfd5049d7be5107a888966a744af
+--> 683bc9403b4
+STEP 17/39: ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+--> Using cache c54db776501eb3ba1c0bb3a5ef4deece863c68cfb90d550bf058d7c4851bb48c
+--> c54db776501
+STEP 18/39: RUN yum install java-11-openjdk -y
+--> Using cache b3bd9ab96af6a933809b24248933e54328dde8588ae732b265c91807ceeba3a2
+--> b3bd9ab96af
+STEP 19/39: RUN useradd $username
+--> Using cache 568cbfdb415ce6d81c4d12058343dadd7163d634a8bf92a827431ab623ab2543
+--> 568cbfdb415
+STEP 20/39: RUN echo $username:$default_pw | chpasswd
+--> Using cache 422ddbafeb6128bffebf0a657afc36daa114777a9782eb491ffa6b7ac356e06b
+--> 422ddbafeb6
+STEP 21/39: USER $username
+--> Using cache 7de3535b0b514130be0838df398b9417754fde9cb3615de0e8fa6b61ef547ff0
+--> 7de3535b0b5
+STEP 22/39: WORKDIR /home/$username/
+--> Using cache 9f4c2f2958ad870ca3f59135b660fbbf70344e9ffd59decd35c2e11ef9a3a9ee
+--> 9f4c2f2958a
+STEP 23/39: COPY $artemis_tarball .
+--> Using cache 5cee20f82a1644ea8c108d337e0c57943264cf500a0d26619d41782b1839189c
+--> 5cee20f82a1
+STEP 24/39: RUN tar -xvf $artemis_tarball
+--> Using cache e15260adcba00bb48948e8cbd4ea0cd79c626033210e7b9ea1c2834346017c0c
+--> e15260adcba
+STEP 25/39: RUN echo "export ARTEMIS_HOME=/home/$env_username/$env_artemis_install_dir" >> /home/$username/.bashrc
+--> Using cache a03bec1bb04dcbe7e36e9da20b907ddac122947d1716504a31015ae57c32a565
+--> a03bec1bb04
+STEP 26/39: RUN source /home/$username/.bashrc
+--> Using cache 94c972156ba2934fa43e471786238314a3f72d043cd1b9b5ed15c6b9a1359db5
+--> 94c972156ba
+STEP 27/39: RUN $artemis_install_dir/bin/artemis create ~/mybroker --user $broker_user --password $broker_pw --allow-anonymous
+--> Using cache 14bef1b9f4dfea09e46d1f244ecfd2d42ef96635066ad4c7ba94a62aa9d9606f
+--> 14bef1b9f4d
+STEP 28/39: RUN echo "/home/$env_username/mybroker/bin/artemis run" > runit.sh
+--> Using cache 350e9e344e105002beee93ea6d379eca425c11738318979e7725e9f0a375e60f
+--> 350e9e344e1
+STEP 29/39: RUN chmod +x runit.sh
+--> Using cache 8be2b6ffdbbf966250b04e4927c3cc2bfba8f3716bd0b1f23316c1e9835f6abe
+--> 8be2b6ffdbb
+STEP 30/39: RUN echo "/home/$env_username/mybroker/bin/artemis-service start > live-log.txt" > start_service.sh
+--> Using cache 44ed5a442b40e05ec0780fa73d88779549c802d04d4211f1316adc13e61ac3ca
+--> 44ed5a442b4
+STEP 31/39: RUN chmod +x start_service.sh
+--> Using cache eaf7f2341ecb24ad11be3e21570302f71ad587f2379e41ae01a4d8447d600f1c
+--> eaf7f2341ec
+STEP 32/39: COPY artemis-users.properties ./mybroker/etc/
+--> Using cache 5b34381035fee8cca639ad50b585bdf4619944498dd687dfd597f569f302ea3d
+--> 5b34381035f
+STEP 33/39: COPY broker.xml ./mybroker/etc/
+--> Using cache ca0321176f6b1b1f650e78cb05cc7e3bfc140b614157b17d964887da541c70c7
+--> ca0321176f6
+STEP 34/39: COPY login.config ./mybroker/etc/
+--> Using cache 59bcc81112d0ffa2a6ed435401a43b6ff8f523f49d009bafde693c2a87648329
+--> 59bcc81112d
+STEP 35/39: COPY artemis-roles.properties ./mybroker/etc/
+--> Using cache 3c769d7796242fd9338d0ff4e00bc0644ee0ed7c33e80d578834e6a5c4dd6f96
+--> 3c769d77962
+STEP 36/39: COPY bootstrap.xml ./mybroker/etc/
+--> Using cache 1fc23eeae29ef2a336647e23f1add8c10f56a6589f8614671851bded52fe7169
+--> 1fc23eeae29
+STEP 37/39: EXPOSE $broker_port
+--> Using cache c5b53702880a20686b382dd500baeaef81e379e5cd70ff677398f757d9af625d
+--> c5b53702880
+STEP 38/39: EXPOSE $broker_web
+--> Using cache bb70c3726e8c05211f05f2699bf18211a302cbef4c6e2495d0b92932334bbb21
+--> bb70c3726e8
+STEP 39/39: CMD /home/$env_username/./start_service.sh && tail -f live-log.txt
 COMMIT rhel7-artemis-live
---> d9072070e96
+--> 902b2d31b44
 Successfully tagged localhost/rhel7-artemis-live:latest
-Successfully tagged localhost/rhel7-artemis:latest
-d9072070e960c8e666d952517198e8d057f266cbeb8bd50accb466b5e8f128bb
+902b2d31b44175f406a27231c2ddb65be89879e07ed26367542923475763ca34

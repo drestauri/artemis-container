@@ -1,3 +1,6 @@
+podman kill live-server
+podman container prune -f
+
 podman run -p 8161:8161 -p 61616:61616 --net new-network --name live-server -d rhel7-artemis-live
 
 #podman run -p 8161:8161 -p 61616:61616 -ti --privileged --entrypoint /bin/bash rhel7-artemis

@@ -2,19 +2,6 @@ FROM rhel7
 
 MAINTAINER Red Hat, Inc.
 
-# Configurable Arguments
-ARG username=artemis
-ARG default_pw=artemis
-ARG artemis_tarball=artemis-2.27.1-bin.tar.gz
-ARG artemis_install_dir=apache-artemis-2.27.1
-ARG broker_user=artemis
-ARG broker_pw=artemis
-ARG broker_port=61616
-ARG broker_web=8161
-# Need ENV as well for anything interpreted from inside the container (e.g. echo'ed to a shell)
-ENV env_username $username
-ENV env_artemis_install_dir $artemis_install_dir
-
 #labels for container catalog
 LABEL summary="Provides the latest release of Red Hat Enterprise Linux 7 in a fully featured and supported base image."
 LABEL io.k8s.display-name="Red Hat Enterprise Linux 7"
@@ -26,7 +13,7 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 #====== ROOT USER =======
 # Install apps while still root user
 #RUN yum update -y;
-#RUN yum install sudo -y
+RUN yum install sudo -y
 RUN yum install java-11-openjdk -y
 
 # Steps to get systemd working
@@ -42,30 +29,30 @@ RUN yum install java-11-openjdk -y
 #VOLUME ["/sys/fs/cgroup"]
 
 
-# Create a new user, add them to sudoers (disabled), give a defualt pw,  and switch to it
-RUN useradd $username
-#RUN usermod -aG wheel $username
-RUN echo $username:$default_pw | chpasswd
-USER $username
+# Create a new user, add them to sudoers, and switch to it
+RUN useradd artemis
+RUN usermod -aG wheel artemis
+RUN echo artemis:password | chpasswd
+USER artemis
 
 
 #====== ARTEMIS USER =====
 # Copy over Artemis and unpack it
-WORKDIR /home/$username/
-COPY $artemis_tarball .
-RUN tar -xvf $artemis_tarball
+WORKDIR /home/artemis/
+COPY artemis-2.27.1-bin.tar.gz .
+RUN tar -xvf artemis-2.27.1-bin.tar.gz
 
 # Setup permanent environment variable
-RUN echo "export ARTEMIS_HOME=/home/$env_username/$env_artemis_install_dir" >> /home/$username/.bashrc
-RUN source /home/$username/.bashrc
+RUN echo "export ARTEMIS_HOME=/home/artemis/apache-artemis-2.27.1" >> /home/artemis/.bashrc
+RUN source /home/artemis/.bashrc
 
 # Build broker:./artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
-RUN $artemis_install_dir/bin/artemis create ~/mybroker --user $broker_user --password $broker_pw --allow-anonymous
+RUN apache-artemis-2.27.1/bin/artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
 
 # Create a file for testing from within the container
-RUN echo "/home/$env_username/mybroker/bin/artemis run" > runit.sh
+RUN echo "/home/artemis/mybroker/bin/artemis run" > runit.sh
 RUN chmod +x runit.sh
-RUN echo "/home/$env_username/mybroker/bin/artemis-service start > live-log.txt" > start_service.sh
+RUN echo "/home/artemis/mybroker/bin/artemis-service start" > start_service.sh
 RUN chmod +x start_service.sh
 
 # Copy over the Artemis files:
@@ -77,14 +64,13 @@ COPY bootstrap.xml ./mybroker/etc/
 
 
 # Expose the ports needed for the servers
-EXPOSE $broker_port
-EXPOSE $broker_web
+EXPOSE 61616
+EXPOSE 8161
 
+CMD /home/artemis/mybroker/bin/artemis-service start > live-log.txt && tail -f live-log.txt
 
-# ==== ENTRY POINT =====
-#CMD /home/$env_username/mybroker/bin/artemis-service start > live-log.txt && tail -f live-log.txt
-CMD /home/$env_username/./start_service.sh && tail -f live-log.txt
+# If you only do the following, it will execute the script and then kill the pod since there are no active processes:
+#CMD /home/artemis/mybroker/bin/artemis-service start
 
-# ==== For d
 #USER root
 
