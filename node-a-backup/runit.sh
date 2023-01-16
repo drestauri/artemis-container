@@ -1,3 +1,6 @@
+podman kill backup-server
+podman container prune -f
+
 podman run -p 8162:8162 -p 61617:61617 --net new-network --name backup-server -d rhel7-artemis-backup
 
 #podman run -p 8162:8162 -p 61617:61617 -ti --privileged --entrypoint /bin/bash rhel7-artemis-backup

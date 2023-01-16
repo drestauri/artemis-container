@@ -55,18 +55,23 @@ WORKDIR /home/$username/
 COPY $artemis_tarball .
 RUN tar -xvf $artemis_tarball
 
-# Setup permanent environment variable
+# Setup permanent environment variables
 RUN echo "export ARTEMIS_HOME=/home/$env_username/$env_artemis_install_dir" >> /home/$username/.bashrc
 RUN source /home/$username/.bashrc
 
 # Build broker:./artemis create ~/mybroker --user artemis --password artemis --allow-anonymous
 RUN $artemis_install_dir/bin/artemis create ~/mybroker --user $broker_user --password $broker_pw --allow-anonymous
 
-# Create a file for testing from within the container
-RUN echo "/home/$env_username/mybroker/bin/artemis run" > runit.sh
-RUN chmod +x runit.sh
-RUN echo "/home/$env_username/mybroker/bin/artemis-service start > live-log.txt" > start_service.sh
+# Create a file for launching the app & an entry app
+RUN echo "exec /home/$env_username/mybroker/bin/artemis-service start" > start_service.sh
+# These are not needed if using entry.sh as they are included in that script
+# > stdout.log 2> stderr.log" > start_service.sh
+COPY entry.sh ./entry.sh.backup
+# Copy sets the owner as root so need to make an "artemis" owned copy
+RUN cp entry.sh.backup entry.sh
+
 RUN chmod +x start_service.sh
+RUN chmod +x entry.sh
 
 # Copy over the Artemis files:
 COPY artemis-users.properties ./mybroker/etc/
@@ -83,7 +88,21 @@ EXPOSE $broker_web
 
 # ==== ENTRY POINT =====
 #CMD /home/$env_username/mybroker/bin/artemis-service start > live-log.txt && tail -f live-log.txt
-CMD /home/$env_username/./start_service.sh && tail -f live-log.txt
+
+# Keeps the container alive by streaming the log file. You would think SIGINT would work OK
+# to shut this down since CTRL + C stops tail -f but didn't appear to work well. Maybe because
+# that doesn't actually stop the Artemis service? I doubt it...
+#CMD /home/$env_username/./start_service.sh && tail -f stdout.log
+
+# This is used with entry.sh to enable more graceful handling of podman stop live-server (SIGINT).
+# exec is necessary to get an interactive terminal so that signals are not ignored
+CMD exec /home/$env_username/./entry.sh /home/$env_username/mybroker/bin/artemis-service start
+# These don't need to be appended since they are already in entry.sh
+# >>/app/my_log.txt 2>>/app/stderr.log
+
+# Works to keep the terminal open so the container keeps running. Also podman stop live-server will
+# close the container, but I think it just does CTRL + C on the terminal window.
+#CMD /home/$env_username/mybroker/bin/artemis run
 
 # ==== For d
 #USER root
