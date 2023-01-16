@@ -63,7 +63,7 @@ RUN source /home/$username/.bashrc
 RUN $artemis_install_dir/bin/artemis create ~/mybroker --user $broker_user --password $broker_pw --allow-anonymous
 
 # Create a file for launching the app & an entry app
-RUN echo "exec /home/$env_username/mybroker/bin/artemis-service start" > start_service.sh
+RUN echo "/home/$env_username/mybroker/bin/artemis-service start" > start_service.sh
 # These are not needed if using entry.sh as they are included in that script
 # > stdout.log 2> stderr.log" > start_service.sh
 COPY entry.sh ./entry.sh.backup

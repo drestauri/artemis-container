@@ -1,0 +1,11 @@
+warning: /var/cache/yum/x86_64/7Server/rhel-7-server-rpms/packages/avahi-libs-0.6.31-20.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Importing GPG key 0xFD431D51:
+ Userid     : "Red Hat, Inc. (release key 2) <security@redhat.com>"
+ Fingerprint: 567e 347a d004 4ade 55ba 8a5f 199e 2f91 fd43 1d51
+ Package    : redhat-release-server-7.9-6.el7_9.x86_64 (@anaconda/7.9)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Importing GPG key 0x2FA658E0:
+ Userid     : "Red Hat, Inc. (auxiliary key) <security@redhat.com>"
+ Fingerprint: 43a6 e49c 4a38 f4be 9abf 2a53 4568 9c88 2fa6 58e0
+ Package    : redhat-release-server-7.9-6.el7_9.x86_64 (@anaconda/7.9)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
