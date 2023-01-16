@@ -78,31 +78,32 @@ STEP 27/40: RUN $artemis_install_dir/bin/artemis create ~/mybroker --user $broke
 --> Using cache 14bef1b9f4dfea09e46d1f244ecfd2d42ef96635066ad4c7ba94a62aa9d9606f
 --> 14bef1b9f4d
 STEP 28/40: RUN echo "exec /home/$env_username/mybroker/bin/artemis-service start" > start_service.sh
+--> Using cache 908b1c989976e1963929f5dca990e0092532b769da6d9003e72680b160a60c80
 --> 908b1c98997
 STEP 29/40: COPY entry.sh ./entry.sh.backup
---> b4f0e8a30ea
+--> 03953062b43
 STEP 30/40: RUN cp entry.sh.backup entry.sh
---> 329e94baceb
+--> c4622873c41
 STEP 31/40: RUN chmod +x start_service.sh
---> ca323b4d377
+--> e01851624bf
 STEP 32/40: RUN chmod +x entry.sh
---> 0c4b3ee3e58
+--> a69830fe26f
 STEP 33/40: COPY artemis-users.properties ./mybroker/etc/
---> 5ac71be9366
+--> 4a984cbd15d
 STEP 34/40: COPY broker.xml ./mybroker/etc/
---> 91cfa4ff54c
+--> bd51d9f65bd
 STEP 35/40: COPY login.config ./mybroker/etc/
---> 7af82005669
+--> 1f1cab49b0f
 STEP 36/40: COPY artemis-roles.properties ./mybroker/etc/
---> 601fcf322ca
+--> c9a07142292
 STEP 37/40: COPY bootstrap.xml ./mybroker/etc/
---> 62e1cc42279
+--> 595d9c69061
 STEP 38/40: EXPOSE $broker_port
---> fd5bd810825
+--> fe451b21f20
 STEP 39/40: EXPOSE $broker_web
---> 8998a73eda8
+--> 02a214f64fe
 STEP 40/40: CMD exec /home/$env_username/./entry.sh /home/$env_username/mybroker/bin/artemis-service start
 COMMIT rhel7-artemis-live
---> 1e16f01375a
+--> aea9dfbd87c
 Successfully tagged localhost/rhel7-artemis-live:latest
-1e16f01375a533fb6101125d9f58effb106ed17f2b7c1a6e076295f29e3a4d0b
+aea9dfbd87cc76d38f3b76f96977d383269eb1f4576fa7de2965dec57950c113

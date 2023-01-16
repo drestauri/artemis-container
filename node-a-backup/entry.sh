@@ -1,6 +1,6 @@
 #!/bin/sh
 
-APP_NAME="live server"
+APP_NAME="backup server"
 
 ## Redirecting Filehanders
 #ln -sf /proc/$$/fd/1 stdout.log

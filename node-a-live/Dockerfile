@@ -10,7 +10,7 @@ ARG artemis_install_dir=apache-artemis-2.27.1
 ARG broker_user=artemis
 ARG broker_pw=artemis
 ARG broker_port=61616
-ARG broker_web=8161
+ARG web_port=8161
 # Need ENV as well for anything interpreted from inside the container (e.g. echo'ed to a shell)
 ENV env_username $username
 ENV env_artemis_install_dir $artemis_install_dir
@@ -83,7 +83,7 @@ COPY bootstrap.xml ./mybroker/etc/
 
 # Expose the ports needed for the servers
 EXPOSE $broker_port
-EXPOSE $broker_web
+EXPOSE $web_port
 
 
 # ==== ENTRY POINT =====

@@ -1,10 +1,15 @@
-podman kill backup-server
+podman kill live-server
 podman container prune -f
 
-podman run -p 8162:8162 -p 61617:61617 --net new-network --name backup-server -d rhel7-artemis-backup
+# Remove logs
+sudo rm /home/drestauri/.local/share/containers/storage/volumes/my-vol/_data/stdout.log
+sudo rm /home/drestauri/.local/share/containers/storage/volumes/my-vol/_data/stderr.log
 
-#podman run -p 8162:8162 -p 61617:61617 -ti --privileged --entrypoint /bin/bash rhel7-artemis-backup
-#podman run -p 8162:8162 -p 61617:61617 -ti --privileged=true -v /sys/fs/cgroup:/sys/fs/cgroup:ro rhel7-artemis-backup /bin/bash
 
+# Run the container
+podman run -p 8162:8162 -p 61617:61617 \
+	--net new-network \
+	--name backup-server \
+	--mount type=volume,source=my-vol,target=/app \
+	-d rhel7-artemis-backup
 
-#podman run -p 8162:8162 -p 61617:61617 --rm --privileged -ti -v /run -v /sys/fs/cgroup:/sys/fs/cgroup:ro rhel7-artemis-backup

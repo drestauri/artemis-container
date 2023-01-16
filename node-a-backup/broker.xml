@@ -39,7 +39,7 @@ under the License.
                <!-- Needed so backup nodes know which live node to connect to -->
                <group-name>node-A</group-name>
 
-               <allow-failback>false</allow-failback>
+               <allow-failback>true</allow-failback>
             </slave>
          </replication>
       </ha-policy>
