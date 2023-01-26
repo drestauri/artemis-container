@@ -11,6 +11,13 @@ ARG username=drestauri
 #ARG default_pw=password
 #ARG root_pw=securepass
 ARG artemis_ver=2.27.1
+ARG broker_user=artemis
+ARG broker_pw=artemis
+ARG broker_port_1=61616
+ARG broker_port_2=61617
+ARG broker_port_3=61618
+ARG broker_port_4=61619
+ARG web_port=8161
 
 # Need ENV as well for anything interpreted from inside the container (e.g. echo'ed to a shell)
 #ENV env_username $username
@@ -73,7 +80,54 @@ RUN mv *apache-artemis-$artemis_ver* apache-artemis-$artemis_ver-bin.tar.gz
 RUN tar -xvf apache-artemis-$artemis_ver-bin.tar.gz
 RUN rm *.tar.gz
 
-RUN echo "export ARTEMIS_HOME=$HOME" >> ~/.bashrc
+RUN echo "export ARTEMIS_HOME=\$HOME/apache-artemis-$artemis_ver" >> ~/.bashrc
+RUN source ~/.bashrc
+
+RUN /home/$username/apache-artemis-$artemis_ver/bin/artemis create ~/mybroker --user $broker_user --password $broker_pw --allow-anonymous
+
+# Copy over the certs
+COPY certs certs
+USER root
+RUN chown $username certs/*
+USER $username
+RUN cp certs/* /home/$username/mybroker/etc/
+
+
+# Create a file for launching the app
+RUN echo "\$HOME/mybroker/bin/artemis-service start" > start_service.sh
+RUN chmod +x start_service.sh
+
+# Copy over the entry point script for kicking off the service
+COPY entry.sh ./entry.sh
+USER root
+RUN chown $username entry.sh
+USER $username
+
+
+# Copy over the Artemis files:
+COPY artemis-users.properties ./mybroker/etc/
+COPY artemis-roles.properties ./mybroker/etc/
+COPY cert-users.properties ./mybroker/etc/
+COPY cert-roles.properties ./mybroker/etc/
+COPY broker.xml ./mybroker/etc/
+COPY login.config ./mybroker/etc/
+COPY bootstrap.xml ./mybroker/etc/
+
+# Expose the ports needed for the servers
+EXPOSE $broker_port_1
+EXPOSE $broker_port_2
+EXPOSE $broker_port_3
+EXPOSE $broker_port_4
+EXPOSE $web_port
+
+
+# ==== ENTRY POINT =====
+# This is used with entry.sh to enable more graceful handling of podman stop live-server (SIGINT).
+# exec is necessary to get an interactive terminal so that signals are not ignored
+#CMD exec /home/$username/./entry.sh /home/$username/mybroker/bin/artemis-service start
+
+
+#USER root
 
 
 # ==== ENTRY POINT =====

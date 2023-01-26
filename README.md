@@ -1,8 +1,8 @@
 # artemis-container
 Creating an Artemis container
 
-# Usage Notes
-The dnsname plugin is necessary for container's reference each other by name. Check it out at clone it to your container host VM:
+# Getting Started
+The dnsname plugin is necessary for container's reference each other by name. Find it at the link below and clone it to your container host VM:
 ```www.github.com/containers/dnsname```
 
 Building that plugin also requires golang:
@@ -14,11 +14,27 @@ sudo make PREFIX=/usr
 sudo make install PREFIX=/usr
 ```
 
-You can then proceed to create your network for podman:
-``` podman network create new-network```
+To see available networks:
+``` podman network ls ```
 
-And include it, along with a name, when you run your container:
-```podman run -p 8161:8161 -p 61616:61616 --net new-network --name live-server -d rhel7-artemis-live```
+You can then proceed to create your network for podman:
+``` podman network create my-network```
+
+To see available volumes:
+``` podman volume ls ```
+
+Also need to create a volume for storing container logs
+``` podman volume create my-vol ```
+
+You can list and inspect volumes to find the mountpoint where the data is stored locally
+``` podman volume inspect my-vol ```
+
+And include the network and volume, along with a name, when you run your container:
+```podman run -p 8161:8161 -p 61616:61616 \
+    --net new-network \
+    --name live-server \
+    --mount type=volume,source=my-vol,target=/app \
+    -d rhel7-artemis-live```
 
 Login to the container:
 ```podman exec -it live-server /bin/bash```
@@ -27,26 +43,14 @@ And you could be able to reference the other server by name (assuming it was run
 ```curl -v backup-server:8162```
 
 # TODO
- - Install nslookup
- - Need to get DNS to work in order to find other containers by name
-   > dnsmasq? bind? both look like a pain to configure :(
- - Update the usage section below
+ - Add Usage below
+ - Consider installing nslookup
  - Test thoroughly
- - Start implementing backups and other nodes
+ - Implement SSL enabled server
+ - Implement Backup servers
 
 # Description
-To get the service to run un-interrupted in a container, you need to run the container without a defined entry point and with the -d flag for "detached" (similar to running in the background for containers).
-Also, the service start script had to be execute and then a log file opened with ```tail -f``` so that there is some active, running process to keep the container alive.
+TBD
 
 # Usage
-Download the latest Artemis and replace the version information in the Docker file.
-
-Navigate to: http://activemq.apache.org/components/artemis/download/
-
-Copy the link to the tar.gz
-
-Copy it to this directory using wget:
-```wget -c "paste-link-inside-quotations"```
-
-Rename the file: 
-``` mv htpps://some.long.name.artemis-2.27.1.tar.gz artemis-2.27.1.tar.gz```
+TBD

@@ -8,7 +8,7 @@ sudo rm /home/drestauri/.local/share/containers/storage/volumes/my-vol/_data/std
 
 # Run the container
 podman run -p 8161:8161 -p 61616:61616 \
-	--net new-network \
+	--net my-network \
 	--name live-server \
 	--mount type=volume,source=my-vol,target=/app \
 	-d rhel7-artemis-live

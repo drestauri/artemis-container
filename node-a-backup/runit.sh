@@ -8,7 +8,7 @@ sudo rm /home/drestauri/.local/share/containers/storage/volumes/my-vol/_data/std
 
 # Run the container
 podman run -p 8162:8162 -p 61617:61617 \
-	--net new-network \
+	--net my-network \
 	--name backup-server \
 	--mount type=volume,source=my-vol,target=/app \
 	-d rhel7-artemis-backup
