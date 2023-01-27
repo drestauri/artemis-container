@@ -1,56 +1,27 @@
 # artemis-container
 Creating an Artemis container
 
+# Notices
+These scripts were developed on a RHEL 8 VM and are not guaranteed to work on other OSs due to differences in the available packages.
+
+Currently, the scripts are setup to support testing of an SSL enabled client-broker connection which has been unsuccessful so far.
+
 # Getting Started
-The dnsname plugin is necessary for container's reference each other by name. Find it at the link below and clone it to your container host VM:
-```www.github.com/containers/dnsname```
+The shell scripts included in this project should contain all of the commands necessary to setup dependencies, build, and run an Artemis Broker with SSL enabled and a Client with the ActiveMQ Client libraries and GMSEC API installed.
 
-Building that plugin also requires golang:
-```sudo yum install go```
+Once the container's are run, verify they are running with
+``` podman ps ```
 
-Change directories into dnsname where the Makefile is and run the following to build the dnsname plugin:
-```
-sudo make PREFIX=/usr
-sudo make install PREFIX=/usr
-```
+You should see 2 containers with the names "ssl-container" and "client-container". You can know run scripts 7 and 8 to get a terminal in either of those containers. 
 
-To see available networks:
-``` podman network ls ```
-
-You can then proceed to create your network for podman:
-``` podman network create my-network```
-
-To see available volumes:
-``` podman volume ls ```
-
-Also need to create a volume for storing container logs
-``` podman volume create my-vol ```
-
-You can list and inspect volumes to find the mountpoint where the data is stored locally
-``` podman volume inspect my-vol ```
-
-And include the network and volume, along with a name, when you run your container:
-```podman run -p 8161:8161 -p 61616:61616 \
-    --net new-network \
-    --name live-server \
-    --mount type=volume,source=my-vol,target=/app \
-    -d rhel7-artemis-live```
-
-Login to the container:
-```podman exec -it live-server /bin/bash```
-
-And you could be able to reference the other server by name (assuming it was run in the same fashion using a different port):
-```curl -v backup-server:8162```
-
-# TODO
- - Add Usage below
- - Consider installing nslookup
- - Test thoroughly
- - Implement SSL enabled server
- - Implement Backup servers
-
-# Description
-TBD
+Both containers are currently setup to still need you to manually start the Artemis bus (ssl-container) and run whichever pub_test.sh (client-container) you wish to test.
 
 # Usage
-TBD
+You should be able to just run scripts 0 through 6 to build and set everything up. Rerun individual scripts as needed to rebuild the Artemis servers or Clients. Then login to the running containers with scripts 7 and 8. Occasionally, you can run script 99 to clean up stale containers.
+
+# TODO
+ - Consider installing nslookup
+ - Test thoroughly
+ - Implement & Verify SSL enabled server
+ - Implement Backup servers
+
