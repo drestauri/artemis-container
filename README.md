@@ -1,5 +1,5 @@
 # artemis-container
-Creating an Artemis container
+This project was created to test development of an Artemis container with SSL enabled, clustering, and High Availability (live/backup servers).
 
 # Notices
 These scripts were developed on a RHEL 8 VM and are not guaranteed to work on other OSs due to differences in the available packages.
@@ -12,7 +12,7 @@ The shell scripts included in this project should contain all of the commands ne
 Once the container's are run, verify they are running with
 ``` podman ps ```
 
-You should see 2 containers with the names "ssl-container" and "client-container". You can know run scripts 7 and 8 to get a terminal in either of those containers. 
+You should see 2 containers with the names "ssl-container" and "client-container". You can now run scripts 7 and 8 to get a terminal in either of those containers. 
 
 Both containers are currently setup to still need you to manually start the Artemis bus (ssl-container) and run whichever pub_test.sh (client-container) you wish to test.
 
