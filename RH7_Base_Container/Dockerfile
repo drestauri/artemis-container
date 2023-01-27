@@ -28,7 +28,7 @@ RUN yum install python3 -y
 # Set the root pw
 RUN echo root:$root_pw | chpasswd
 
-# Create a new user, add them to sudoers (disabled), give a defualt pw,  and switch to it
+# Create a new user and give a default pw
 RUN useradd $username
 RUN echo $username:$default_pw | chpasswd
 
