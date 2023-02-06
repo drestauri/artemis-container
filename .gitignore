@@ -1,3 +1,6 @@
 
 *.txt
 artemis*.tar.gz
+
+SSL_Certs/certs/
+SSL_Certs/certs_gmsec/
