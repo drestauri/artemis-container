@@ -55,21 +55,22 @@ ARG web_port=8161
 # Download OpenSSL 3.0
 USER $username
 WORKDIR /home/$username/
-RUN git clone git://git.openssl.org/openssl.git
-# Prereqs:
-# make
-# Perl 5 (see NOTES-PERL.md)
-USER root
-RUN yum install perl-core -y
+#RUN git clone git://git.openssl.org/openssl.git
+## Prereqs:
+## make
+## Perl 5 (see NOTES-PERL.md)
+#USER root
+#RUN yum install perl-core -y
 
-USER $username
-WORKDIR /home/$username/openssl
-RUN ./Configure
-RUN make
+#USER $username
+#WORKDIR /home/$username/openssl
+#RUN ./Configure
+#RUN make
 
 USER root
-RUN make install
-RUN ldconfig /usr/local/lib64
+RUN yum install openssl openssl-devel -y
+#RUN make install
+#RUN ldconfig /usr/local/lib64
 
 
 # Download Artemis
@@ -88,6 +89,9 @@ RUN /home/$username/apache-artemis-$artemis_ver/bin/artemis create ~/mybroker --
 # Copy over the certs
 COPY certs certs
 USER root
+RUN cp certs/*ca.pem /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust extract
+
 RUN chown $username certs/*
 USER $username
 RUN cp certs/* /home/$username/mybroker/etc/

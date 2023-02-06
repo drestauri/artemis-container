@@ -44,8 +44,9 @@ ENV env_artemis_install_dir $artemis_install_dir
 #RUN echo $username:$default_pw | chpasswd
 
 #=== ActiveMQ Client Library Install ===
-WORKDIR /home/$username/
-#RUN yum install openssl openssl-devel -y
+#WORKDIR /home/$username/
+USER root
+RUN yum install openssl openssl-devel -y
 
 # OBE (GMSEC "Support" files include this) Build and install APR
 #USER $username
@@ -88,6 +89,9 @@ WORKDIR /home/$username/
 COPY certs certs
 USER root
 RUN chown $username certs/*
+RUN cp certs/*.ts.pem /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust extract
+
 USER $username
 RUN cp certs/* /home/$username/
 
