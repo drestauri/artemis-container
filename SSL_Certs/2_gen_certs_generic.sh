@@ -137,8 +137,9 @@ rm tmp.ext
 
 
 # Create a truststore for the Root CA in P12 and also convert to PEM
-cat certs/root-ca.pem > tmp_chain.crt
-openssl pkcs12 -export -in tmp_chain.crt -out certs/truststore.p12 -nokeys -caname root-ca -certpbe aes-256-cbc -passout pass:$TRUSTSTORE_PASS
+openssl x509 -text -in certs/root-ca.pem > tmp_chain.crt
+#openssl pkcs12 -export -in tmp_chain.crt -out certs/truststore.p12 -nokeys -caname root-ca -certpbe aes-256-cbc -passout pass:$TRUSTSTORE_PASS
+echo yes | keytool -import -alias root-key -file tmp_chain.crt -keystore certs/truststore.p12 -storetype PKCS12 -storepass $TRUSTSTORE_PASS
 openssl pkcs12 -in certs/truststore.p12 -passin pass:$TRUSTSTORE_PASS -out certs/truststore.pem -passout pass:$TRUSTSTORE_PASS -aes256
 rm tmp_chain.crt
 
