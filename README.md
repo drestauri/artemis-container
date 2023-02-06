@@ -19,6 +19,12 @@ Both containers are currently setup to still need you to manually start the Arte
 # Usage
 You should be able to just run scripts 0 through 6 to build and set everything up. Rerun individual scripts as needed to rebuild the Artemis servers or Clients. Then login to the running containers with scripts 7 and 8. Occasionally, you can run script 99 to clean up stale containers.
 
+The way the scripts are setup, the ssl-container will have 3 ports open (61616, 61617, 61618) with 3 different certifate solutions applied (my own certs, GMSEC script generated certs, and the certs provided with the Artemis examples) and an additional port for TCP connections (61619).
+
+The client-container has all 3 cert types in the home directory with 4 scripts for testing each of the above 4 connection methods. 
+
+Note that all 3 SSL solutions result in the same failed connection and error messages, though the certs generated via my own cert process have an additional error so are likely no good. I am keeping them in there for future testing.
+
 # TODO
  - Consider installing nslookup
  - Test thoroughly
