@@ -10,7 +10,7 @@ MAINTAINER Red Hat, Inc.
 ARG username=drestauri
 #ARG default_pw=password
 #ARG root_pw=securepass
-ARG artemis_ver=2.27.1
+ARG artemis_ver=2.28.0
 ARG broker_user=artemis
 ARG broker_pw=artemis
 ARG broker_port_1=61616

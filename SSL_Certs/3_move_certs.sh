@@ -56,58 +56,51 @@ cp $CERT_DIR2/artemis-client.ts.pem $CLIENT_DIR/$DEST_DIR/gmsec-artemis-client.t
 #openssl x509 -text -in $CERT_DIR2/artemis-client.ts.pem > $CLIENT_DIR/$DEST_DIR/gmsec-artemis-client.ts.pem
 
 # Copy client certs from dir3 (Artemis example certs)
-cp $CERT_DIR3/ex-artemis-client.ks.pem $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ks.pem
-cp $CERT_DIR3/ex-artemis-client.ts.pem $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ts.pem
-#openssl x509 -text -in $CERT_DIR3/ex-artemis-client.ks.pem > $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ks.pem
-#openssl x509 -text -in $CERT_DIR3/ex-artemis-client.ts.pem > $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ts.pem
+#cp $CERT_DIR3/ex-artemis-client.ks.pem $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ks.pem
+#cp $CERT_DIR3/ex-artemis-client.ts.pem $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ts.pem
+openssl x509 -text -in $CERT_DIR3/ex-artemis-client.ks.pem > $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ks.pem
+openssl x509 -text -in $CERT_DIR3/ex-artemis-client.ts.pem > $CLIENT_DIR/$DEST_DIR/ex-artemis-client.ts.pem
 cp $CERT_DIR3/ex-artemis-client.ks.pem $CLIENT_DIR/$DEST_DIR/ex-original-artemis-client.ks.pem
 cp $CERT_DIR3/ex-artemis-client.ts.pem $CLIENT_DIR/$DEST_DIR/ex-original-artemis-client.ts.pem
 cp $CERT_DIR3/ex-artemis-client-conv.ks.pem $CLIENT_DIR/$DEST_DIR/ex-artemis-client-conv.ks.pem
 cp $CERT_DIR3/ex-artemis-client-conv.ts.pem $CLIENT_DIR/$DEST_DIR/ex-artemis-client-conv.ts.pem
 
 
-#====== SERVER CERTS =========
-# Copy server ks and ts from my cert process
-cp $CERT_DIR1/artemis-server.ks.p12 ./my-artemis-server.ks
-cp $CERT_DIR1/truststore.p12 ./my-artemis-server.ts
-cp $CERT_DIR1/root-ca.pem ./my-ca.pem
-#openssl x509 -text -in truststore.pem ./my-artemis-server.ts`
-
-# Copy server ks and ts from GMSEC cert process
-cp $CERT_DIR2/artemis-server.ks ./gmsec-artemis-server.ks 2> /dev/null
-cp $CERT_DIR2/artemis-server.ts ./gmsec-artemis-server.ts 2> /dev/null
-cp $CERT_DIR2/ca.crt ./gmsec-ca.pem
-
-# Copy server ks and ts from Artemis example
-cp $CERT_DIR3/server-keystore.jks ./ex-artemis-server-keystore.jks 2> /dev/null
-cp $CERT_DIR3/client-ca-truststore.jks ./ex-artemis-server-truststore.jks 2> /dev/null
-cp $CERT_DIR3/ex-artemis-client.ts.pem ./ex-ca.pem
-
-# Copy the files over (requires password entry)
+#===== SERVER CERTS =====
+# Copy the server certs over (SCP requires password entry)
 if
 	[ $SCP_CERTS = "True" ]
 then
 	echo "SCP'ing server certs to $SCP_DEST"
-	scp my-artemis-server.ks $SCP_DEST
-	scp my-artemis-server.ts $SCP_DEST
-	scp gmsec-artemis-server.ks $SCP_DEST
-	scp gmsec-artemis-server.ts $SCP_DEST
-	scp my-ca.pem $SCP_DEST
-	scp ex-ca.pem $SCP_DEST
-	scp gmsec-ca.pem $SCP_DEST
+	scp $CERT_DIR1/artemis-server.ks.p12 $SCP_DEST/my-artemis-server.ks
+        scp $CERT_DIR1/truststore.p12 $SCP_DEST/my-artemis-server.ts
+        scp $CERT_DIR1/root-ca.pem $SCP_DEST/my-ca.pem
+
+        scp $CERT_DIR2/artemis-server.ks $SCP_DEST/gmsec-artemis-server.ks
+        scp $CERT_DIR2/artemis-server.ts $SCP_DEST/gmsec-artemis-server.ts
+        scp $CERT_DIR2/ca.crt $SCP_DEST/gmsec-ca.pem
+
+        scp $CERT_DIR3/server-keystore.jks $SCP_DEST/ex-artemis-server-keystore.jks
+        scp $CERT_DIR3/client-ca-truststore.jks $SCP_DEST/ex-artemis-server-truststore.jks
+        scp $CERT_DIR3/ex-artemis-client.ts.pem $SCP_DEST/ex-ca.pem
 fi
 
 if
         [ $CP_CERTS = "True" ]
 then
-	echo "Copying server certs to $CP_DEST"
-	mkdir $CP_DEST 2> /dev/null
-        cp my-artemis-server.ks $CP_DEST/
-        cp my-artemis-server.ts $CP_DEST/
-        cp gmsec-artemis-server.ks $CP_DEST/
-        cp gmsec-artemis-server.ts $CP_DEST/
-	cp my-ca.pem $CP_DEST/
-	cp gmsec-ca.pem $CP_DEST/
+        echo "Copying server certs to $CP_DEST"
+        mkdir $CP_DEST 2> /dev/null
+        cp $CERT_DIR1/artemis-server.ks.p12 $CP_DEST/my-artemis-server.ks
+        cp $CERT_DIR1/truststore.p12 $CP_DEST/my-artemis-server.ts
+        cp $CERT_DIR1/root-ca.pem $CP_DEST/my-ca.pem
+        
+	cp $CERT_DIR2/artemis-server.ks $CP_DEST/gmsec-artemis-server.ks
+        cp $CERT_DIR2/artemis-server.ts $CP_DEST/gmsec-artemis-server.ts
+        cp $CERT_DIR2/ca.crt $CP_DEST/gmsec-ca.pem
+        
+	cp $CERT_DIR3/server-keystore.jks $CP_DEST/ex-artemis-server-keystore.jks
+        cp $CERT_DIR3/client-ca-truststore.jks $CP_DEST/ex-artemis-server-truststore.jks
+        cp $CERT_DIR3/ex-artemis-client.ts.pem $CP_DEST/ex-ca.pem
 fi
 
 

@@ -8,5 +8,6 @@ AMQ_Client/certs/
 SSL_Certs/*.ks
 SSL_Certs/*.ts
 SSL_Certs/*.pem
+SSL_Certs/*.jks
 SSL_Certs/certs/
 SSL_Certs/certs_gmsec/
