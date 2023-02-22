@@ -3,12 +3,12 @@ FROM rhel7-min
 MAINTAINER Red Hat, Inc.
 
 # User Arguments
-ARG username=drestauri
+ARG username=artemis-client
 ARG default_pw=password
 ARG root_pw=securepass
 ARG apr_ver=apr-1.7.0
 ARG amq_lib_ver=activemq-cpp-library-3.9.5
-ARG gmsec_ver=4.9.1
+ARG gmsec_ver=5.0
 ARG gmsec_platform=RH7_x86_64
 ARG gmsec_support_os=RHEL7
 
@@ -16,64 +16,14 @@ ARG gmsec_support_os=RHEL7
 ENV env_username $username
 ENV env_artemis_install_dir $artemis_install_dir
 
-#==== Commented out due to starting from my own rhel7-min image =====
-
-#labels for container catalog
-#LABEL summary="Provides the latest release of Red Hat Enterprise Linux 7 in a fully featured and supported base image."
-#LABEL io.k8s.display-name="Red Hat Enterprise Linux 7"
-#LABEL io.openshift.tags="base rhel7"
-
-#ENV container oci
-#ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
-#====== ROOT USER =======
-# Install apps while still root user
-#RUN yum update -y;
-#RUN yum groupinstall "Development Tools" -y
-
-#RUN yum install java-11-openjdk -y
-#RUN yum install wget -y
-#RUN yum install less -y
-#RUN yum install python3 -y
-
-# Set the root pw
-#RUN echo root:$root_pw | chpasswd
-
 # Create a new user, add them to sudoers (disabled), give a defualt pw,  and switch to it
-#RUN useradd $username
-#RUN echo $username:$default_pw | chpasswd
+RUN useradd $username
+RUN echo $username:$default_pw | chpasswd
 
 #=== ActiveMQ Client Library Install ===
 #WORKDIR /home/$username/
 USER root
 RUN yum install openssl openssl-devel -y
-
-# OBE (GMSEC "Support" files include this) Build and install APR
-#USER $username
-#WORKDIR /home/$username/
-#RUN wget -c "https://dlcdn.apache.org//apr/$apr_ver.tar.gz"
-#RUN tar -xvf $apr_ver.tar.gz
-#RUN rm $apr_ver.tar.gz
-#WORKDIR /home/$username/$apr_ver
-#RUN ./configure
-#RUN make
-
-#USER root
-#RUN make install
-
-# BE (GMSEC "Support" files include this) Build and install ActiveMQ Client Libraries
-#USER $username
-#WORKDIR /home/$username/
-#RUN wget -c "https://dlcdn.apache.org/activemq/activemq-cpp/3.9.5/$amq_lib_ver-src.tar.gz"
-#RUN tar -xvf $amq_lib_ver-src.tar.gz
-#RUN rm $amq_lib_ver-src.tar.gz
-#WORKDIR /home/$username/$amq_lib_ver
-#RUN touch test.txt
-#RUN ./configure
-#RUN make > res.log 2> err.log
-
-#USER root
-#RUN make install > res2.log 2> err2.log
 
 # Copy over SSL Cert files
 USER $username

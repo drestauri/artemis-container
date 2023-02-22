@@ -36,20 +36,14 @@ under the License.
 
       <connectors>
           <connector name="self-tcp-connector">tcp://0.0.0.0:61619</connector>
-          <connector name="self-my-connector">tcp://0.0.0.0:61616</connector>
-          <connector name="self-gmsec-connector">tcp://0.0.0.0:61617</connector>
-          <connector name="self-ex-connector">tcp://0.0.0.0:61618</connector>
       </connectors>
 
       <!-- Acceptors -->
       <acceptors>
-          <acceptor name="tcp-acceptor">tcp://0.0.0.0:61619?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576</acceptor>
+          <acceptor name="tcp-acceptor">tcp://0.0.0.0:61616?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576</acceptor>
 
-          <acceptor name="my-ssl-acceptor">tcp://0.0.0.0:61616?sslEnabled=true;keyStorePath=my-artemis-server.ks;keyStorePassword=securepass;trustStorePath=my-artemis-server.ts;trustStorePassword=securepass;needClientAuth=true;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576</acceptor>
+          <acceptor name="ssl-acceptor">tcp://0.0.0.0:51617?sslEnabled=true;keyStorePath=broker.ks;keyStorePassword=securepass;trustStorePath=broker.ts;trustStorePassword=securepass;needClientAuth=true;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576</acceptor>
 
-          <acceptor name="gmsec-ssl-acceptor">tcp://0.0.0.0:61617?sslEnabled=true;keyStorePath=gmsec-artemis-server.ks;keyStorePassword=securepass;trustStorePath=gmsec-artemis-server.ts;trustStorePassword=securepass;needClientAuth=true;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576</acceptor>
-
-          <acceptor name="ex-ssl-acceptor">tcp://0.0.0.0:61618?sslEnabled=true;keyStorePath=ex-artemis-server.ks;keyStorePassword=securepass;trustStorePath=ex-artemis-server.ts;trustStorePassword=securepass;needClientAuth=true;tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576</acceptor>
       </acceptors>
 
       <!-- Other config -->
@@ -96,8 +90,6 @@ under the License.
             </anycast>
          </address>
       </addresses>
-
-
 
 
    </core>

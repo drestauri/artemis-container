@@ -18,11 +18,11 @@
 
 <broker xmlns="http://activemq.apache.org/schema">
    
-   <jaas-security domain="activemq" certificate-domain="activemq-cert"/>
+   <jaas-security domain="activemq"/>
 
    <!-- artemis.URI.instance is parsed from artemis.instance by the CLI startup.
         This is to avoid situations where you could have spaces or special characters on this URI -->
-   <server configuration="file:/home/drestauri/mybroker/etc//broker.xml"/>
+   <server configuration="file:/home/artemis-broker/mybroker/etc//broker.xml"/>
 
    <!-- The web server is only bound to localhost by default -->
    <web path="web">

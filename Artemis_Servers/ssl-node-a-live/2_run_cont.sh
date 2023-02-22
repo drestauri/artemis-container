@@ -7,7 +7,7 @@ sudo rm /home/drestauri/.local/share/containers/storage/volumes/my-vol/_data/std
 
 
 # If the container stays running
-podman run -p 8161:8161 -p 61616:61616 -p 61617:61617 -p 61618:61618 -p 61619:61619 \
+podman run -p 8161:8161 -p 61616:61616 -p 51617:51617 \
 	--net my-network \
 	--name ssl-container \
 	--mount type=volume,source=my-vol,target=/app \
